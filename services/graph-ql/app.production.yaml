@@ -1,0 +1,19 @@
+runtime: nodejs
+service: graphql
+
+env: flex
+
+manual_scaling:
+  instances: 6
+resources:
+  cpu: 4
+  memory_gb: 16
+  disk_size_gb: 10
+
+beta_settings:
+  cloud_sql_instances: nobul-production:us-east1:production
+
+env_variables:
+  NODE_ENV: "production"
+  SERVER_PORT: 8080
+  RUNNING_ON: "server"

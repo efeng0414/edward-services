@@ -1,0 +1,161 @@
+version: 2
+jobs:
+  # need a job for each folder deployment
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:8.11.3
+
+    working_directory: ~/web
+
+    environment:
+      - NODE_ENV: development
+
+    steps:
+      - checkout
+
+      - run:
+          name: "Restore Dev Env Variables"
+          command: echo $ENV_DEV_VARIABLES | base64 --decode > .env.development
+
+      - run:
+          name: "Restore Web Testing Env Variables"
+          command: echo $ENV_WEBTESTING_VARIABLES | base64 --decode > .env.webTesting
+
+      - run:
+          name: "install dependencies for each service"
+          command: ./.circleci/scripts/.setup-dependencies.sh
+
+  test:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:8.11.3
+
+    working_directory: ~/web
+
+    steps:
+      - checkout
+
+      - run:
+          name: "Pull Submodules"
+          command: git submodule update --init --recursive
+
+      - restore_cache:
+          keys:
+            - dependencies-{{ checksum "package.json" }}
+            - dependencies-
+
+      # run tests!
+      - run:
+          name: "JavaScript Test Suite"
+          # yarn here makes sure we are using the local jest binary
+          command: yarn test --maxWorkers=2 --ci --reporters=default --reporters=jest-junit
+          environment:
+            JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
+
+      - store_test_results:
+          path: reports/junit
+
+      - store_artifacts:
+          path: reports/junit
+
+  deploy-dev-2:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:8.11.3
+
+    working_directory: ~/web
+
+    steps:
+      - checkout
+
+      - run:
+          name: "Pull Submodules"
+          command: git submodule update --init --recursive
+
+      - restore_cache:
+          keys:
+            - dependencies-{{ checksum "package.json" }}
+            - dependencies-
+
+      - run:
+          name: "Restore Env Variables"
+          command: echo $ENV_DEV_VARIABLES | base64 --decode > .env.development
+
+      - run:
+          name: Create dist folder
+          command: yarn dev-build-client
+      - run:
+          name: Firebase Deploy
+          command: |
+            ./node_modules/.bin/firebase use nobul-dev-2
+            ./node_modules/.bin/firebase deploy --only hosting:app --token=$FIREBASE_TOKEN
+
+  deploy-web-testing:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:8.11.3
+
+    working_directory: ~/web
+
+    steps:
+      - checkout
+
+      - run:
+          name: "Pull Submodules"
+          command: git submodule update --init --recursive
+
+      - restore_cache:
+          keys:
+            - dependencies-{{ checksum "package.json" }}
+            - dependencies-
+
+      - run:
+          name: "Restore Env Variables"
+          command: echo $ENV_WEBTESTING_VARIABLES | base64 --decode > .env.webTesting
+
+      - run:
+          name: Create dist folder
+          command: yarn dev-build-testing
+      - run:
+          name: Firebase Deploy
+          command: |
+            ./node_modules/.bin/firebase use web-testing
+            ./node_modules/.bin/firebase deploy --only hosting:app --token=$FIREBASE_TOKEN
+
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      # - deploy-dev-2:
+      #     requires:
+      #       - test
+      #     filters:
+      #       branches:
+      #         only: develop
+      # - deploy-web-testing:
+      #     requires:
+      #       - test
+      #     filters:
+      #       branches:
+      #         only:
+      #           - /release.*/
+  # nightly:
+  #   triggers:
+  #     - schedule:
+  #         cron: "0 5 * * 0,3,4,5,6"
+  #         filters:
+  #           branches:
+  #             only: develop
+  #   jobs:
+  #     - build
+  #     - deploy-web-testing:
+  #         requires:
+  #           - build
+  #         filters:
+  #           branches:
+  #             only: develop

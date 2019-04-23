@@ -1,0 +1,22 @@
+{
+  "name": "maps-services",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start-dev": "nodemon server.js",
+    "generate-route-docs": "./node_modules/.bin/jsdoc $(ls ./routes/*.js) --destination route-docs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/maps": "0.5.5",
+    "dotenv": "6.2.0",
+    "express": "4.16.4"
+  },
+  "devDependencies": {
+    "jsdoc": "3.5.5",
+    "nodemon": "1.18.9"
+  }
+}

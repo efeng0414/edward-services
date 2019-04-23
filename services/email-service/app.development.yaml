@@ -1,0 +1,19 @@
+runtime: nodejs
+service: email-test
+
+env: flex
+
+manual_scaling:
+  instances: 1
+resources:
+  cpu: 1
+  memory_gb: 4
+  disk_size_gb: 10
+
+beta_settings:
+  cloud_sql_instances: nobul-dev-2:us-east1:dev-postgres
+
+env_variables:
+  NODE_ENV: "development"
+  SERVER_PORT: 8080
+  RUNNING_ON: "server"

@@ -1,0 +1,19 @@
+runtime: nodejs
+service: referral
+
+env: flex
+
+manual_scaling:
+  instances: 1
+resources:
+  cpu: 1
+  memory_gb: 4
+  disk_size_gb: 10
+
+beta_settings:
+  cloud_sql_instances: data-platform-poc-215421:us-east1:platform-postgres
+
+env_variables:
+  NODE_ENV: "platform"
+  SERVER_PORT: 8080
+  RUNNING_ON: "server"
