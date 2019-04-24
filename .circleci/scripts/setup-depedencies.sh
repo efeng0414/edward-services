@@ -7,17 +7,15 @@ do
     then
         echo "Directory - $f"
 
-        cd $f
-
         #- Create .env file in each folder
         # name: "Restore Env Variables"
-        # command: cp ../../.env.development ..env.development
-        # command: cp ../../.env.webTesting ..env.webTesting
+        cp ./.env.development $f/.env.development
+        cp ./.env.webTesting $f/.env.webTesting
+
+        cd $f
 
         #- Install Npm Package for each directory
-        # yarn
-
-        pwd
+        yarn
 
         cd ../..
     fi

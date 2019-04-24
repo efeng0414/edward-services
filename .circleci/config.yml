@@ -6,10 +6,7 @@ jobs:
       # specify the version you desire here
       - image: circleci/node:8.11.3
 
-    working_directory: ~/web
-
-    environment:
-      - NODE_ENV: development
+    working_directory: ~/edward-services
 
     steps:
       - checkout
@@ -26,38 +23,20 @@ jobs:
           name: "install dependencies for each service"
           command: ./.circleci/scripts/.setup-dependencies.sh
 
-  test:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:8.11.3
+    # TODO: see if I can cache the node_module of each service
 
-    working_directory: ~/web
+  deploy:
+    docker:      
+      - image: google/cloud-sdk 
+
+    working_directory: ~/edward-services
 
     steps:
       - checkout
 
-      - run:
-          name: "Pull Submodules"
-          command: git submodule update --init --recursive
-
-      - restore_cache:
-          keys:
-            - dependencies-{{ checksum "package.json" }}
-            - dependencies-
-
-      # run tests!
-      - run:
-          name: "JavaScript Test Suite"
-          # yarn here makes sure we are using the local jest binary
-          command: yarn test --maxWorkers=2 --ci --reporters=default --reporters=jest-junit
-          environment:
-            JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
-
-      - store_test_results:
-          path: reports/junit
-
-      - store_artifacts:
-          path: reports/junit
+      #TODO: 
+      # 1 gcloud authorization
+      # 2 run the script deploy-services.sh
 
   deploy-dev-2:
     docker:
