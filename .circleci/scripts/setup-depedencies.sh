@@ -15,7 +15,7 @@ do
         cd $f
 
         #- Install Npm Package for each directory
-        yarn
+        yarn --ignore-engines
 
         cd ../..
     fi
