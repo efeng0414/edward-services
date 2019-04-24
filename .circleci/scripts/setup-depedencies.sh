@@ -1,7 +1,7 @@
 #!/bin/bash
-PATH=./services/*
+TARGET=./services/*
 
-for f in $PATH
+for f in $TARGET
 do
     if [ -d "$f" ]
     then
@@ -10,7 +10,7 @@ do
         #- Create .env file in each folder
         # name: "Restore Env Variables"
         cp ./.env.development $f/.env.development
-        cp ./.env.webTesting $f/.env.webTesting
+        # cp ./.env.webTesting $f/.env.webTesting
 
         cd $f
 
@@ -20,3 +20,5 @@ do
         cd ../..
     fi
 done
+
+echo "✅✅ ======= Finish setup =========== ✅✅"
