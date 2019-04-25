@@ -1,7 +1,7 @@
 #!/bin/bash
-PATH=./services/*
+TARGET=./services/*
 
-for f in $PATH
+for f in $TARGET
 do
     if [ -d "$f" ]
     then
@@ -10,6 +10,8 @@ do
         cd $f
 
         SERVICE_NAME=$(cat app.development.yaml | awk '/service:/ { print $2}')
+
+        echo "Deploying service $SERVICE_NAME........."
 
         #- Run deployment for dev2 and webtesting
 
@@ -21,13 +23,13 @@ do
             echo "dev2 deployment fail: $f"
         fi
 
-        if yarn deploy:webtesting
-        then 
-            OLD_VERSION=$(gcloud app versions list --service email-test | awk '($3 -eq 0 && $5 == "STOPPED") {print $2}')
-            gcloud app services delete $SERVICE_NAME --version=$OLD_VERSION
-        else 
-            echo "webtesting deployment fail: $f"
-        fi
+        # if yarn deploy:webtesting
+        # then 
+        #     OLD_VERSION=$(gcloud app versions list --service email-test | awk '($3 -eq 0 && $5 == "STOPPED") {print $2}')
+        #     gcloud app services delete $SERVICE_NAME --version=$OLD_VERSION
+        # else 
+        #     echo "webtesting deployment fail: $f"
+        # fi
 
         cd ../..
     fi
