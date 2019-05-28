@@ -12,7 +12,7 @@
     "dev": "nodemon --watch src -e ts --exec npm run start-dev",
     "test": "node_modules/.bin/jest --coverage",
     "test:watch": "jest --watch",
-    "deploy:dev": "NODE_ENV=development npm run build; gcloud config set project nobul-dev-2; gcloud app deploy app.development.yaml --quiet",
+    "deploy:dev": "NODE_ENV=development npm run build; gcloud config set project nobul-rahul; gcloud app deploy app.development.yaml --quiet",
     "deploy:platform": "NODE_ENV=platform npm run build; gcloud config set project data-platform-poc-215421; gcloud app deploy app.platform.yaml --quiet",
     "deploy:production": "NODE_ENV=production npm run build; gcloud config set project nobul-production; gcloud app deploy app.production.yaml --quiet",
     "deploy:webtesting": "NODE_ENV=webtesting npm run build; gcloud config set project nobul-web-testing; gcloud app deploy app.webtesting.yaml --quiet"
