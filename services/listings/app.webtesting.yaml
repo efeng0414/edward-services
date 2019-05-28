@@ -1,13 +1,13 @@
 runtime: nodejs
-service: graphql
+service: listings
 
 env: flex
 
 manual_scaling:
-  instances: 6
+  instances: 1
 resources:
-  cpu: 4
-  memory_gb: 16
+  cpu: 1
+  memory_gb: 4
   disk_size_gb: 10
 
 beta_settings:

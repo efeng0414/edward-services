@@ -57,7 +57,7 @@ export const USER_TYPES = {
 export const PG_NOTIFY = "notification";
 
 export const EMAIL_TEMPLATES = {
-  WELCOME_USER_AGENT: "d-bbd7b121559841c38f2b7613bb664a4e",
+  WELCOME_USER_AGENT: "d-96ff4e0063604d4dafab788fe529aebb",
   WELCOME_USER_CONSUMER: "d-581699ab705a49b6a497ac773f8fd1eb",
   NOTIFICATIONS: "d-bc553d411e82438387e826b961cb78b1",
   CONSUMER_ACCEPTED_PROPOSAL: "d-0f30eab7a8334d8aae699ad0a6052061",
@@ -69,9 +69,9 @@ export const EMAIL_TEMPLATES = {
 
 export const SENDER_INFORMATION = {
   id: 451202,
-  nickname: `Nobul Corporation`,
-  from: { email: "support@nobul.com", name: `Nobul Corporation` },
-  reply_to: { email: "support@nobul.com", name: `Nobul Corporation` },
+  nickname: "Nobul Corporation",
+  from: { email: "support@nobul.com", name: "Nobul Corporation" },
+  reply_to: { email: "support@nobul.com", name: "Nobul Corporation" },
   address: "200 Wellington",
   address_2: "Suite 310",
   city: "Toronto",
@@ -84,12 +84,18 @@ export const SENDER_INFORMATION = {
   phone: "1-833-490-9042"
 };
 
+const URL_ENV = {
+  development: process.env.DEV_EMAIL_ACTION_URL,
+  webtesting: process.env.WEBTESTING_EMAIL_ACTION_URL,
+  production: process.env.PRODUCTION_EMAIL_ACTION_URL
+};
+
 export const actionCodeSettings = {
   // URL you want to redirect back to. The domain (www.example.com) for
   // this URL must be whitelisted in the Firebase Console.
 
   //@ts-ignore
-  url: process.env.EMAIL_ACTION_URL
+  url: URL_ENV[process.env.NODE_ENV]
 
   // TODO:
   // Figure if we need the config below

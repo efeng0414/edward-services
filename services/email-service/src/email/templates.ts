@@ -47,6 +47,8 @@ const templates = async ({ type, payload }: any) => {
                 dateObj: new Date(payload.consumer.meeting_end_time)
               }),
               meeting_type: payload.consumer.meeting_type,
+              meeting_description: payload.consumer.meeting_description,
+              meeting_title: payload.consumer.meeting_title,
               agent_phone_number: payload.agent.phone_number,
               consumer_phone_number: payload.consumer.phone_number
             }

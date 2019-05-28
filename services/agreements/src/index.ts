@@ -17,8 +17,21 @@ connect(
   "referral_agreement_created"
 );
 
+function ticker() {
+  const today = new Date();
+  console.log(
+    "Tick: " +
+      today.getHours() +
+      ":" +
+      today.getMinutes() +
+      ":" +
+      today.getSeconds()
+  );
+}
+setInterval(ticker, 60 * 60 * 1000);
+
 // Post server - Local only
 // *************************************
-if (isLocal()) {
-  ReferralPost();
-}
+// if (isLocal()) {
+ReferralPost();
+// }

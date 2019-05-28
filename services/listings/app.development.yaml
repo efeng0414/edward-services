@@ -1,19 +1,19 @@
 runtime: nodejs
-service: graphql
+service: listings
 
 env: flex
 
 manual_scaling:
-  instances: 6
+  instances: 1
 resources:
-  cpu: 4
-  memory_gb: 16
+  cpu: 1
+  memory_gb: 4
   disk_size_gb: 10
 
 beta_settings:
-  cloud_sql_instances: nobul-web-testing:us-east1:web-postgres
+  cloud_sql_instances: nobul-dev-2:us-east1:dev-postgres
 
 env_variables:
-  NODE_ENV: "webtesting"
+  NODE_ENV: "development"
   SERVER_PORT: 8080
   RUNNING_ON: "server"

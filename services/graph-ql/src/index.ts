@@ -14,6 +14,7 @@ import DevelopmentFirebaseUserId from "./middleware/development-firebase-user";
 import GetUserIdAndRole from "./middleware/get-user-id-and-role";
 import SetFirebaseUserClaims from "./middleware/set-firebase-user-claims";
 import EmailService from "./plugins/EmailService";
+import CustomQueries from "./plugins/customQueries";
 import { DatabaseConfigType, getDatabaseConfig } from "./utilities/database";
 admin_init();
 
@@ -34,7 +35,7 @@ console.log("Is Local: " + localEnv);
 app.use(cors()); // TODO: Proper cors
 app.use(Compression());
 
-if (localEnv) {
+if (process.env.NODE_ENV === "development") {
   app.use(DevelopmentFirebaseUserId); // Use supplied FirebaseUID if we're in development mode.
 }
 
@@ -81,7 +82,7 @@ app.use("/", (req: Request, res: Response, next: NextFunction) => {
         })
       ),
     pgSettings: req.pgSettings || { role: DEFAULT_DB_RULE },
-    appendPlugins: [EmailService],
+    appendPlugins: [EmailService, CustomQueries],
     ...cacheOptions,
     ...developerOptions
   })(req, res, next);

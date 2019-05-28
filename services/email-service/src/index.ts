@@ -1,11 +1,11 @@
-import { configure } from "./config";
-configure();
-
 import {
   NOTIFICATION_CHANNEL,
   EMAIL_ACTION,
   SENDER_INFORMATION
 } from "./config/constants";
+import { configure } from "./config";
+configure();
+
 import connect from "./database/client";
 
 // DB connect
@@ -26,7 +26,9 @@ const app = express();
 // Middlewares
 // *************************************
 app.use(cors());
-app.use(bodyParser());
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Service
 // *************************************
